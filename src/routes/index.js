@@ -58,6 +58,7 @@ router.post(
 router.get("/categories", getCategory);
 
 // ====== Product Controller ======
+
 router.post(
   "/merchant/product",
   auth,

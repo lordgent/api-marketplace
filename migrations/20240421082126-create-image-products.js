@@ -2,7 +2,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('AccessRoles', {
+    await queryInterface.createTable('ImageProducts', {
       id: {
         allowNull: false,
         primaryKey: true,
@@ -17,28 +17,34 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
-      roleId: {
+      productId: {
         type: Sequelize.STRING,
         references: {
-          model: 'Roles',
+          model: 'Products',
           key: 'id'
         },
         onUpdate: 'CASCADE',
         onDelete: 'CASCADE'
       },
+      image: {
+        type: Sequelize.STRING
+      },
+      indexValue: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
+        defaultValue: Sequelize.fn("now"),
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now")
       },
       updatedAt: {
         allowNull: false,
+        defaultValue: Sequelize.fn("now"),
         type: Sequelize.DATE,
-        defaultValue: Sequelize.fn("now")
       }
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('AccessRoles');
+    await queryInterface.dropTable('ImageProducts');
   }
 };

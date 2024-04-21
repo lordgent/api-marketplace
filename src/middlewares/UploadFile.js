@@ -50,7 +50,7 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory,imageMerchant) =>
   }).fields([
     {
       name: imageProduct,
-      maxCount: 1,
+      maxCount: 5,
     },
     {
       name: imageProfile,

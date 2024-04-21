@@ -1,2 +1,0 @@
-INSERT INTO users (id,fullname,email,password,createdAt,updatedAt,city,address,postalCode) VALUES
-	 ('8e6ba760-00ec-41f0-a0a3-8355bb56d366','Admin System','admin@mail.com','$2b$10$5oveSqU3GHQk/kpMWAx0/OIHxufxYr7Ihje3POp88CyX9zG2ZSYmG','2024-04-20 13:26:42','2024-04-20 13:26:42',NULL,NULL,NULL);

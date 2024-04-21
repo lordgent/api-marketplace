@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      Users.hasMany(models.ImageProducts, {
+        as: 'imageProduct', 
+        foreignKey: {
+          name: 'userId', 
+        }
+      });
+
       Users.hasMany(models.Merchants, {
         as: 'merchants',
         foreignKey: {

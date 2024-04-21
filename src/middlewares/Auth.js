@@ -12,6 +12,7 @@ exports.auth = async (req,res,next) => {
             message: "Access Denied",
             });
           }
+          
           const verified = jwt.verify(token, process.env.SECRET_KEY);
          
           req.userid = verified.id;

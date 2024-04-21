@@ -1,4 +1,9 @@
-const { Products, Categories, Merchants } = require("../../models");
+const {
+  Products,
+  Categories,
+  Merchants,
+  ImageProducts,
+} = require("../../models");
 const { v4: uuidv4 } = require("uuid");
 const Joi = require("joi");
 
@@ -16,6 +21,7 @@ exports.addProduct = async (req, res) => {
   });
 
   const { error } = schema.validate(req.body);
+
   if (error) {
     return res.status(400).send({
       status: "BAD REQUEST",
@@ -52,13 +58,26 @@ exports.addProduct = async (req, res) => {
       price: price,
       stock: stock,
       weight: weight,
-      photo: "uploads/products/" + req.files.imageProduct[0].filename,
       merchantId: find.id,
       categoryId: categoryId,
       userId: req.userid,
     };
 
     const data = await Products.create(body);
+
+    req.files.imageProduct.reverse()
+
+    for (let i = 0; i < req.files.imageProduct.length; i++) {
+      let image = req.files.imageProduct[i].filename;
+      let bodyImage = {
+        id: uuidv4(),
+        productId: data.id,
+        indexValue: i,
+        userId:req.userid,
+        image: "uploads/products/" + image,
+      };
+       await ImageProducts.create(bodyImage);
+    }
 
     return res.status(200).send({
       status: "SUCCESS",
@@ -88,7 +107,7 @@ exports.getAllProduct = async (req, res) => {
         {
           model: Categories,
           as: "category",
-          attributes: ["name","icon"],
+          attributes: ["name", "icon"],
         },
         {
           model: Merchants,
@@ -98,11 +117,28 @@ exports.getAllProduct = async (req, res) => {
       ],
     });
 
+    const array = [];
+    for (let i = 0; i < products.length; i++) {
+      const element = products[i];
+      const imageProduct = await ImageProducts.findAll({
+        where: {
+          productId: element.id
+        },
+      })
+
+      let obj = {
+        info: element,
+        images: imageProduct
+      };
+      array.push(obj);
+      
+    }
+
     return res.status(200).send({
       status: "SUCCESS",
       message: "list products",
       data: {
-        products: products,
+        products: array,
         page: {
           offset: page,
           limit: limit,

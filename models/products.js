@@ -18,6 +18,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      Products.hasMany(models.ImageProducts, {
+        as: 'imageProduct', 
+        foreignKey: {
+          name: 'productId', 
+        }
+      });
+
 
       Products.belongsTo(models.Categories, {
         as: 'category', 
