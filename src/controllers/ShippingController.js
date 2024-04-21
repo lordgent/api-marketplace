@@ -43,6 +43,7 @@ exports.cekCost = async (req, res) => {
         },
       }
     );
+    const data = response.data;
 
     return res.status(200).send({
       status: "success",
