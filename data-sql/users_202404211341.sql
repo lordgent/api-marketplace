@@ -1,0 +1,4 @@
+INSERT INTO users (id,fullname,email,password,createdAt,updatedAt,city,address,postalCode) VALUES
+	 ('8e6ba760-00ec-41f0-a0a3-8355bb56d366','Admin System','admin@mail.com','$2b$10$5oveSqU3GHQk/kpMWAx0/OIHxufxYr7Ihje3POp88CyX9zG2ZSYmG','2024-04-20 13:26:42','2024-04-20 13:26:42',NULL,NULL,NULL),
+	 ('a13cbf47-4865-474f-acf9-85e976f93210','Lordgent Rafelino','lordgent@mail.com','$2b$10$2nt2P4ZfK1s.1IEhxXcajOJJ1pSriXwJ4V1Rk8ifH3Bs4JIkSThL2','2024-04-20 13:25:59','2024-04-20 13:25:59',NULL,NULL,NULL),
+	 ('dc2ff4cd-b7d7-4e91-a339-c0c5af5315e4','Jhon doe','john@mail.com','$2b$10$wR2YOZKalZIYbGob3bppgeqowfqeB2IK/fElRjtSWsI5tYIfCnD4a','2024-04-20 13:56:32','2024-04-21 04:22:34','Malang','Jl Embong Malang no 49 Malang','60171');
