@@ -8,7 +8,7 @@ exports.auth = async (req,res,next) => {
         const token = authHeader && authHeader.split(" ")[1]; 
         if (!token) {
             return res.status(401).send({
-            status: "Forbidden", 
+            status: "FORBIDDEN", 
             message: "Access Denied",
             });
           }
@@ -20,8 +20,8 @@ exports.auth = async (req,res,next) => {
     } catch (error) {
         console.log(error.message);
         res.status(400).send({
-            stasu: "error",
-            message: error.message,
+            status: "error",
+            message: "Invalid token",
        });
     }
 }
@@ -55,9 +55,9 @@ exports.AuthAdm = async (req, res, next) => {
 
     next();
     } catch (error) {
-    console.log(error);
       res.status(500).send({
         status: "SERVER ERROR",
+        message: "Invalid token"
       });
     }
   };
@@ -93,6 +93,7 @@ exports.AuthAdm = async (req, res, next) => {
         console.error(error);
         return res.status(500).send({
             status: "SERVER ERROR",
+            message: "Invalid token",
         });
     }
 };

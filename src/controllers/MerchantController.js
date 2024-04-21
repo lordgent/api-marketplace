@@ -44,6 +44,12 @@ exports.createMerchant = async (req, res) => {
       userId: req.userid,
     });
 
+    await AccessRoles.destroy({
+      where: {
+        userId: req.userid
+      },
+    });
+
     const findRole = await Roles.findOne({
       where: {
         name: "merchant",
@@ -51,6 +57,7 @@ exports.createMerchant = async (req, res) => {
     });
 
     await AccessRoles.create({
+      id: uuidv4(),
       userId: req.userid,
       roleId: findRole.id,
     });

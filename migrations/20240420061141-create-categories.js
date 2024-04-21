@@ -14,6 +14,9 @@ module.exports = {
       icon: {
         type: Sequelize.STRING
       },
+      isDelete: {
+        type: Sequelize.INTEGER
+      },
       createdAt: {
         allowNull: false,
         defaultValue: Sequelize.fn("now"),

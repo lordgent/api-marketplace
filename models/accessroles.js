@@ -19,12 +19,11 @@ module.exports = (sequelize, DataTypes) => {
       });
 
       AccessRoles.belongsTo(models.Users, {
-        as: "users",
+        as: "user",
         foreignKey: {
           name: "userId",
         },
       });
-
       
     }
   }

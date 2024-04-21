@@ -35,6 +35,17 @@ exports.signIn = async (req, res) => {
       });
     }
     const token = jwt.sign({ id: data.id }, process.env.SECRET_KEY);
+    const access = await AccessRoles.findOne({
+        where: {
+          userId: data.id
+        },
+        include: [
+          {
+          model: Roles,
+          as: 'roles',
+          }
+        ]
+      })
 
     return res.status(200).send({
       status: "SUCCESS",
@@ -42,6 +53,7 @@ exports.signIn = async (req, res) => {
       data: {
         email: data.email,
         token: token,
+        role: access.roles.name
       },
     });
   } catch (error) {
@@ -86,7 +98,7 @@ exports.signUp = async (req, res) => {
 
     const findRole = await Roles.findOne({
       where: {
-        name: "user",
+        name: "admin",
       },
     });
 
@@ -109,6 +121,7 @@ exports.signUp = async (req, res) => {
     });
 
     await AccessRoles.create({
+      id: uuidv4(),
       userId: data.id,
       roleId: findRole.id
     })

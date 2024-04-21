@@ -26,6 +26,9 @@ module.exports = {
       photo: {
         type: Sequelize.STRING
       },
+      isDelete: {
+        type: Sequelize.INTEGER
+      },
       merchantId: {
         type: Sequelize.STRING,
         references: {

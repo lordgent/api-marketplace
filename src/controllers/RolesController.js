@@ -14,6 +14,7 @@ exports.addRole = async (req, res) => {
       message: "add role success",
       data: data,
     });
+    
   } catch (error) {
     return res.status(500).send({
       status: "INTERNAL SERVER ERROR",

@@ -7,6 +7,8 @@ const { uploadFile } = require("../middlewares/UploadFile");
 const {
   addCategory,
   getCategory,
+  isDeleteCategory,
+  updateCategory,
 } = require("../controllers/CategoryController");
 const { addRole } = require("../controllers/RolesController");
 const { signIn, signUp } = require("../controllers/AuthController");
@@ -18,6 +20,10 @@ const {
 const {
   addProduct,
   getAllProduct,
+  getDetailProduct,
+  deleteImage,
+  deleteProduct,
+  updateProduct,
 } = require("../controllers/ProductController");
 const {
   addToCart,
@@ -56,9 +62,16 @@ router.post(
   addCategory
 );
 router.get("/categories", getCategory);
+router.put(
+  "/admin/category",
+  auth,
+  AuthAdm,
+  uploadFile("iconCategory"),
+  updateCategory
+);
+router.delete("/admin/category/:id", auth, AuthAdm, isDeleteCategory);
 
 // ====== Product Controller ======
-
 router.post(
   "/merchant/product",
   auth,
@@ -67,6 +80,10 @@ router.post(
   addProduct
 );
 router.get("/merchant/products", getAllProduct);
+router.get("/product/:id", getDetailProduct);
+router.delete("/merchant/product/:id", deleteProduct);
+router.delete("/merchant/product-image/:id", deleteImage);
+router.put("/merchant/product",auth, AuthMerchant, uploadFile("imageProduct"), updateProduct)
 
 // ======== Cart Controller ========
 router.post("/user/cart", auth, addToCart);
