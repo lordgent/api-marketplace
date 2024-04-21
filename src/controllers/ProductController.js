@@ -6,7 +6,10 @@ exports.addProduct = async (req, res) => {
   const schema = Joi.object({
     name: Joi.string().min(4).required(),
     description: Joi.string().min(4).required(),
-    price: Joi.string().min(4).required(),
+    price: Joi.alternatives().try(
+      Joi.string().regex(/^\d+$/).min(5).required(),
+      Joi.number().min(5).required()
+    ),
     stock: Joi.number().required(),
     weight: Joi.number().required(),
     categoryId: Joi.string().min(4).required(),
@@ -15,9 +18,8 @@ exports.addProduct = async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).send({
-      error: {
-        message: error.details[0].message,
-      },
+      status: "BAD REQUEST",
+      message: error.details[0].message,
     });
   }
 
@@ -59,14 +61,13 @@ exports.addProduct = async (req, res) => {
     const data = await Products.create(body);
 
     return res.status(200).send({
-      status: "success",
+      status: "SUCCESS",
       message: "create product success",
       data: data.name,
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
-      status: "SERVER ERROR",
+      status: "INTERNAL SERVER ERROR",
       message: error.message,
     });
   }
@@ -98,7 +99,7 @@ exports.getAllProduct = async (req, res) => {
     });
 
     return res.status(200).send({
-      status: "success",
+      status: "SUCCESS",
       message: "list products",
       data: {
         products: products,
@@ -111,7 +112,7 @@ exports.getAllProduct = async (req, res) => {
     });
   } catch (error) {
     return res.status(500).send({
-      status: "SERVER ERROR",
+      status: "INTERNAL SERVER ERROR",
       message: error.message,
     });
   }

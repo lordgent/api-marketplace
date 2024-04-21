@@ -34,7 +34,8 @@ module.exports = (sequelize, DataTypes) => {
     merchant_description: DataTypes.STRING,
     phone_number: DataTypes.STRING,
     address: DataTypes.STRING,
-    icon: DataTypes.STRING
+    icon: DataTypes.STRING,
+    city: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Merchants',

@@ -30,6 +30,9 @@ module.exports = {
       address: {
         type: Sequelize.STRING
       },
+      city: {
+        type: Sequelize.STRING
+      },
       icon: {
         type: Sequelize.STRING
       },

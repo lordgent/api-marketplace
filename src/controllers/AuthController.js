@@ -12,9 +12,8 @@ exports.signIn = async (req, res) => {
   const { error } = schema.validate(req.body);
   if (error) {
     return res.status(400).send({
-      error: {
-        message: error.details[0].message,
-      },
+      status: "BAD REQUEST",
+      message: error.details[0].message,
     });
   }
 
@@ -38,14 +37,14 @@ exports.signIn = async (req, res) => {
     const token = jwt.sign({ id: data.id }, process.env.SECRET_KEY);
 
     return res.status(200).send({
-      status: "success",
+      status: "SUCCESS",
+      message: 'login successfully',
       data: {
         email: data.email,
         token: token,
       },
     });
   } catch (error) {
-    console.log(error);
     return res.status(500).send({
       status: "INTERNAL SERVER ERROR",
       message: error.message,
@@ -64,9 +63,8 @@ exports.signUp = async (req, res) => {
   if (error) {
     console.log(error);
     return res.status(400).send({
-      error: {
-        message: error.details[0].message,
-      },
+      status: "BAD REQUEST",
+      message: error.details[0].message,
     });
   }
 
@@ -116,7 +114,8 @@ exports.signUp = async (req, res) => {
     })
 
     return res.send({
-      status: "success",
+      status: "SUCCESS",
+      message: "register success",
       data:{
         user: data.email,
         role: findRole.name

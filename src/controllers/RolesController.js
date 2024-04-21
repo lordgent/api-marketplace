@@ -10,12 +10,13 @@ exports.addRole = async (req, res) => {
     const data = await Roles.create(body);
 
     return res.status(200).send({
-      status: "success",
+      status: "SUCCESS",
+      message: "add role success",
       data: data,
     });
   } catch (error) {
     return res.status(500).send({
-      status: "SERVER ERROR",
+      status: "INTERNAL SERVER ERROR",
       message: error.message,
     });
   }
