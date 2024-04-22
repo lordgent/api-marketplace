@@ -1,6 +1,6 @@
 const multer = require("multer");
 
-exports.uploadFile = (imageProduct, imageProfile, iconCategory,imageMerchant) => {
+exports.uploadFile = (imageProduct, imageProfile, iconCategory, imageMerchant) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       switch (file.fieldname) {
@@ -13,9 +13,9 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory,imageMerchant) =>
         case "iconCategory":
           cb(null, "uploads/categories");
           break;
-          case "imageMerchant":
-            cb(null, "uploads/merchants");
-            break;
+        case "imageMerchant":
+          cb(null, "uploads/merchants");
+          break;
       }
     },
     filename: (req, file, cb) => {
@@ -25,17 +25,13 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory,imageMerchant) =>
 
   const fileFilter = (req, file, cb) => {
     if (
-      file.fieldname === imageProduct &&
-      file.fieldname === imageProfile &&
-      file.fieldname === iconCategory && 
-      file.fieldname === imageMerchant
+      file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)
     ) {
-      if (!file.originalname.match(/\.(jpg|JPG|jpeg|JPEG|png|PNG)$/)) {
-        req.fileValidationError = "only file images..";
-        return cb(new Error("Only image files are allowed!"), false);
-      }
+      cb(null, true);
+    } else {
+      req.fileValidationError = "only image files are allowed..";
+      cb(new Error("Only image files are allowed!"), false);
     }
-    cb(null, true);
   };
 
   const sizeInMB = 20;
@@ -75,15 +71,7 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory,imageMerchant) =>
         });
       }
 
-      if (!req.files && !err) {
-        return res.status(400).send({
-          status: "Upload Failed!",
-          message: "Please upload file!",
-        });
-      }
-
       if (err) {
-        console.log(err);
         if (err.code === "LIMIT_FILE_SIZE") {
           return res.status(400).send({
             status: "Upload Failed!",

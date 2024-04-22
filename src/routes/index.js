@@ -25,6 +25,7 @@ const {
   deleteImage,
   deleteProduct,
   updateProduct,
+  getProductImage
 } = require("../controllers/ProductController");
 const {
   addToCart,
@@ -86,6 +87,7 @@ router.get("/product/:id", getDetailProduct);
 router.delete("/merchant/product/:id", deleteProduct);
 router.delete("/merchant/product-image/:id", deleteImage);
 router.put("/merchant/product",auth, AuthMerchant, uploadFile("imageProduct"), updateProduct)
+router.get("/merchant/product-image/:id", getProductImage);
 
 // ======== Cart Controller ========
 router.post("/user/cart", auth, addToCart);

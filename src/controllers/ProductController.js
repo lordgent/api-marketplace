@@ -66,20 +66,21 @@ exports.addProduct = async (req, res) => {
 
     const data = await Products.create(body);
 
-    req.files.imageProduct.reverse();
-
-    for (let i = 0; i < req.files.imageProduct.length; i++) {
-      let image = req.files.imageProduct[i].filename;
-      let bodyImage = {
-        id: uuidv4(),
-        productId: data.id,
-        indexValue: i,
-        userId: req.userid,
-        image: "uploads/products/" + image,
-      };
-      await ImageProducts.create(bodyImage);
+    if (req.files.imageProduct && req.files.imageProduct.length > 0) {
+      req.files.imageProduct.reverse();
+    
+      for (let i = 0; i < req.files.imageProduct.length; i++) {
+        let image = req.files.imageProduct[i].filename;
+        let bodyImage = {
+          id: uuidv4(),
+          productId: data.id,
+          indexValue: i,
+          userId: req.userid,
+          image: "uploads/products/" + image,
+        };
+        await ImageProducts.create(bodyImage);
+      }
     }
-
     return res.status(200).send({
       status: "SUCCESS",
       message: "create product success",
@@ -348,19 +349,24 @@ exports.updateProduct = async (req, res) => {
 
     await findProduct.save();
 
-    req.files.imageProduct.reverse();
+    if (req.files.imageProduct && req.files.imageProduct.length > 0){
 
-    for (let i = 0; i < req.files.imageProduct.length; i++) {
-      let image = req.files.imageProduct[i].filename;
-      let bodyImage = {
-        id: uuidv4(),
-        productId: findProduct.id,
-        indexValue: i,
-        userId: req.userid,
-        image: "uploads/products/" + image,
-      };
-      await ImageProducts.create(bodyImage);
+      req.files.imageProduct.reverse();
+
+      for (let i = 0; i < req.files.imageProduct.length; i++) {
+        let image = req.files.imageProduct[i].filename;
+        let bodyImage = {
+          id: uuidv4(),
+          productId: findProduct.id,
+          indexValue: i,
+          userId: req.userid,
+          image: "uploads/products/" + image,
+        };
+        await ImageProducts.create(bodyImage);
+      }
     }
+
+   
 
     return res.status(200).send({
       status: "SUCCESS",
@@ -374,3 +380,26 @@ exports.updateProduct = async (req, res) => {
     });
   }
 };
+
+
+exports.getProductImage = async (req,res) => {
+  try{
+
+    const images = await ImageProducts.findAll({
+      where: {
+        productId: req.params.id,
+      },
+    });
+
+    return res.status(200).send({
+      status: "SUCCESS",
+      message: "list image product success",
+      data: images,
+    });
+  }catch(error){
+    return res.status(500).send({
+      status: "INTERNAL SERVER ERROR",
+      message: error.message,
+    });
+  }
+}
