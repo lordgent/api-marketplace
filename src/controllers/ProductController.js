@@ -180,7 +180,7 @@ exports.getDetailProduct = async (req, res) => {
         {
           model: Categories,
           as: "category",
-          attributes: ["name", "icon"],
+          attributes: ["name", "icon","id"],
         },
         {
           model: Merchants,
