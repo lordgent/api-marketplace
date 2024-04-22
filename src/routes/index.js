@@ -9,6 +9,7 @@ const {
   getCategory,
   isDeleteCategory,
   updateCategory,
+  getDetailCategory
 } = require("../controllers/CategoryController");
 const { addRole } = require("../controllers/RolesController");
 const { signIn, signUp } = require("../controllers/AuthController");
@@ -62,6 +63,7 @@ router.post(
   addCategory
 );
 router.get("/categories", getCategory);
+router.get("/category/:id", getDetailCategory);
 router.put(
   "/admin/category",
   auth,

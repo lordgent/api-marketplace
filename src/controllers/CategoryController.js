@@ -50,6 +50,30 @@ exports.getCategory = async (req, res) => {
   }
 };
 
+
+exports.getDetailCategory = async (req, res) => {
+  try {
+    const categories = await Categories.findOne({
+      where: {
+        isDelete: 0,
+        id: req.params.id
+      }
+    });
+
+    return res.status(200).send({
+      status: "SUCCESS",
+      message: "detail category",
+      data: categories,
+    });
+    
+  } catch (error) {
+    return res.status(500).send({
+      status: "INTERNAL SERVER ERROR",
+      message: error.message,
+    });
+  }
+};
+
 exports.updateCategory = async (req, res) => {
   try {
     const category = await Categories.findOne({

@@ -199,6 +199,7 @@ exports.getDetailProduct = async (req, res) => {
 
     const obj = {
       id: product.id,
+      name: product.name,
       price: product.price,
       stock: product.stock,
       description: product.description,
