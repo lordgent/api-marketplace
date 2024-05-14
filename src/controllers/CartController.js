@@ -70,6 +70,7 @@ exports.getCarts = async (req, res) => {
       message: "List cart",
       data: {
         carts: data,
+        total: data.length
       },
     });
   } catch (error) {

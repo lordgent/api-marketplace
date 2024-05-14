@@ -40,6 +40,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      Products.hasMany(models.OrderItems, {
+        as: 'orderItems', 
+        foreignKey: {
+          name: 'productId', 
+        }
+      });
+
 
 
     }

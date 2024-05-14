@@ -34,6 +34,7 @@ const {
 } = require("../controllers/CartController");
 const { getCity } = require("../controllers/ShippingController");
 const { updateProfile } = require("../controllers/UserController");
+const {checkOutCart,getUserOrder} = require("../controllers/CheckoutController")
 
 router.post("/role", addRole);
 
@@ -96,5 +97,9 @@ router.get("/user/carts", auth, getCarts);
 
 // ===== Shipping Controller =========
 router.get("/shipping/city", getCity);
+
+// ========= Checkout ========
+router.post("/user/checkout", auth, checkOutCart);
+router.get("/user/checkouts", auth, getUserOrder);
 
 module.exports = router;

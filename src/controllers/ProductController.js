@@ -135,6 +135,7 @@ exports.getAllProduct = async (req, res) => {
 
       const obj = {
         id: element.id,
+        name: element.name,
         price: element.price,
         stock: element.stock,
         photo: image.image,

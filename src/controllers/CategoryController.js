@@ -1,5 +1,4 @@
 const { Categories } = require("../../models");
-
 const { v4: uuidv4 } = require("uuid");
 
 exports.addCategory = async (req, res) => {
@@ -117,11 +116,12 @@ exports.isDeleteCategory = async (req, res) => {
 
     return res.status(200).send({
       status: "SUCCESS",
-      message: "update category success",
+      message: "delete category success",
       data: save.name,
     });
 
   } catch (error) {
+    console.log(error);
     return res.status(500).send({
       status: "INTERNAL SERVER ERROR",
       message: error.message,

@@ -26,6 +26,14 @@ module.exports = (sequelize, DataTypes) => {
       });
 
 
+      Merchants.hasMany(models.OrderItems, {
+        as: 'orderItems', 
+        foreignKey: {
+          name: 'sellerId', 
+        }
+      });
+
+
     }
   }
   Merchants.init({
