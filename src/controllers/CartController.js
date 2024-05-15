@@ -1,4 +1,4 @@
-const { Carts, Products, Categories, Merchants } = require("../../models");
+const { Carts, Products, Categories, Merchants,  ImageProducts, } = require("../../models");
 const { v4: uuidv4 } = require("uuid");
 const { Op } = require("sequelize");
 
@@ -18,11 +18,16 @@ exports.addToCart = async (req, res) => {
       },
     });
 
-    if (findProduct !== null) {
-      return res.status(400).send({
-        status: "BAD REQUEST",
-        message: "product already exist",
+    if (findProduct) {
+
+      findProduct.qty = findProduct.qty + 1;
+      findProduct.save();
+      return res.status(200).send({
+        status: "SUCCESS",
+        message: "success",
+        data: findProduct.id,
       });
+
     }
 
     const data = await Carts.create(body);
@@ -31,6 +36,7 @@ exports.addToCart = async (req, res) => {
       message: "add to cart success",
       data: data.id,
     });
+
   } catch (error) {
     return res.status(500).send({
       status: "INTERNAL SERVER ERROR",
@@ -60,10 +66,17 @@ exports.getCarts = async (req, res) => {
               as: "merchant",
               attributes: ["merchant_name"],
             },
+            {
+              model: ImageProducts,
+              as: "imageProduct",
+            },
+            
           ],
         },
       ],
     });
+
+
 
     return res.status(200).send({
       status: "SUCCESS",
@@ -80,6 +93,75 @@ exports.getCarts = async (req, res) => {
     });
   }
 };
+
+
+exports.addQtyCart = async (req,res) => {
+  try{
+
+    const findCart = await Carts.findOne({
+      where: {
+        id: req.body.cartId,
+        userId: req.userid,
+      },
+    });
+
+    if(findCart === null){
+      return res.status(400).send({
+        status: "BAD REQUEST",
+        message: "Cart Not Found",
+      });
+    }
+
+    findCart.qty = req.body.qty;
+    findCart.save();
+
+    return res.status(200).send({
+      status: "SUCCESS",
+      message: "update qty cart",
+      data: findCart.id,
+    });
+
+  }catch(error){
+    return res.status(500).send({
+      status: "INTERNAL SERVER ERROR",
+      message: error.message,
+    });
+  }
+}
+
+
+exports.deleteCart = async ( req,res) => {
+  try{
+    const findCart = await Carts.findOne({
+      where: {
+        id: req.body.cartId,
+        userId: req.userid,
+      },
+    });
+    
+    if(findCart === null){
+      return res.status(400).send({
+        status: "BAD REQUEST",
+        message: "Cart Not Found",
+      });
+    }
+
+    
+    findCart.destroy();
+
+    return res.status(200).send({
+      status: "SUCCESS",
+      message: "delete cart success",
+      data: req.body.cartId,
+    });
+
+  }catch(error){
+    return res.status(500).send({
+      status: "INTERNAL SERVER ERROR",
+      message: error.message,
+    });
+  }
+}
 
 exports.totalPrice = async (req, res) => {
   try {

@@ -31,6 +31,8 @@ const {
   addToCart,
   getCarts,
   totalPrice,
+  addQtyCart,
+  deleteCart
 } = require("../controllers/CartController");
 const { getCity } = require("../controllers/ShippingController");
 const { updateProfile } = require("../controllers/UserController");
@@ -94,6 +96,8 @@ router.get("/merchant/product-image/:id", getProductImage);
 router.post("/user/cart", auth, addToCart);
 router.post("/user/cart/total", auth, totalPrice);
 router.get("/user/carts", auth, getCarts);
+router.put("/user/cart", auth,addQtyCart);
+router.delete("/user/cart", auth,deleteCart);
 
 // ===== Shipping Controller =========
 router.get("/shipping/city", getCity);

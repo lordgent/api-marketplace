@@ -6,6 +6,7 @@ const {
 } = require("../../models");
 const { v4: uuidv4 } = require("uuid");
 const Joi = require("joi");
+const { Op } = require("sequelize");
 
 exports.addProduct = async (req, res) => {
   const schema = Joi.object({
@@ -100,10 +101,11 @@ exports.getAllProduct = async (req, res) => {
     const limit = parseInt(req.query.limit);
 
     const offset = page * limit;
-
     const products = await Products.findAll({
       where: {
         isDelete: 0,
+        ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+        ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
       },
       order: [["name", "ASC"]],
       limit: limit,
@@ -121,6 +123,7 @@ exports.getAllProduct = async (req, res) => {
         },
       ],
     });
+    
 
     const datas = [];
 
