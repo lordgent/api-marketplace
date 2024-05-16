@@ -9,7 +9,7 @@ const {
   getCategory,
   isDeleteCategory,
   updateCategory,
-  getDetailCategory
+  getDetailCategory,
 } = require("../controllers/CategoryController");
 const { addRole } = require("../controllers/RolesController");
 const { signIn, signUp } = require("../controllers/AuthController");
