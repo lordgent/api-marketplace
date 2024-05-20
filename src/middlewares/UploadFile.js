@@ -1,6 +1,6 @@
 const multer = require("multer");
 
-exports.uploadFile = (imageProduct, imageProfile, iconCategory, imageMerchant) => {
+exports.uploadFile = (imageProduct, imageProfile, iconCategory, imageMerchant,imagePayment) => {
   const storage = multer.diskStorage({
     destination: (req, file, cb) => {
       switch (file.fieldname) {
@@ -15,6 +15,9 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory, imageMerchant) =
           break;
         case "imageMerchant":
           cb(null, "uploads/merchants");
+          break;
+          case "imagePayment":
+            cb(null, "uploads/merchants");
           break;
       }
     },
@@ -58,6 +61,10 @@ exports.uploadFile = (imageProduct, imageProfile, iconCategory, imageMerchant) =
     },
     {
       name: imageMerchant,
+      maxCount: 1,
+    },
+    {
+      name: imagePayment,
       maxCount: 1,
     },
   ]);

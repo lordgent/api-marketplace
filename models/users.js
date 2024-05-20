@@ -53,6 +53,13 @@ module.exports = (sequelize, DataTypes) => {
         }
       });
 
+      Users.hasMany(models.Wishlist, {
+        as: 'wishlist', 
+        foreignKey: {
+          name: 'userId', 
+        }
+      });
+
     
     }
   }

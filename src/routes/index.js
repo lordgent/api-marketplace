@@ -36,7 +36,9 @@ const {
 } = require("../controllers/CartController");
 const { getCity } = require("../controllers/ShippingController");
 const { updateProfile } = require("../controllers/UserController");
-const {checkOutCart,getUserOrder} = require("../controllers/CheckoutController")
+const {checkOutCart,getUserOrder,UserProofPayment} = require("../controllers/CheckoutController")
+const {createFavorite,getUserWhistList,deleteFavorite} = require('../controllers/WishlistController')
+
 
 router.post("/role", addRole);
 
@@ -105,5 +107,11 @@ router.get("/shipping/city", getCity);
 // ========= Checkout ========
 router.post("/user/checkout", auth, checkOutCart);
 router.get("/user/checkouts", auth, getUserOrder);
+router.put("/user/checkout-payment", auth,uploadFile("imagePayment"), UserProofPayment);
+
+// ========= Wishlist ===========
+router.post("/user/wishlist", auth,createFavorite);
+router.get("/user/wishlist", auth, getUserWhistList)
+router.delete("/user/wishlist", auth, deleteFavorite)
 
 module.exports = router;

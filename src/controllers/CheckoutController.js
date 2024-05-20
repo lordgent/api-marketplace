@@ -5,8 +5,9 @@ const {
   Products,
   Merchants,
   TransactionStatus,
+  ImageProducts,
 } = require("../../models");
-const { Op } = require("sequelize");
+const { Op, where } = require("sequelize");
 const { v4: uuidv4 } = require("uuid");
 
 exports.checkOutCart = async (req, res) => {
@@ -68,7 +69,6 @@ exports.checkOutCart = async (req, res) => {
     let orders = [];
 
     for (let k = 0; k < req.body.cart.length; k++) {
-      
       const element = req.body.cart[k];
       const cart = await Carts.findOne({
         where: {
@@ -120,7 +120,6 @@ exports.checkOutCart = async (req, res) => {
       message: "checkout success",
       data: orders,
     });
-
   } catch (error) {
     console.log(error);
     return res.status(500).send({
@@ -164,6 +163,10 @@ exports.getUserOrder = async (req, res) => {
                 as: "merchant",
                 attributes: ["merchant_name", "id"],
               },
+              {
+                model: ImageProducts,
+                as: "imageProduct",
+              },
             ],
           },
         ],
@@ -185,6 +188,59 @@ exports.getUserOrder = async (req, res) => {
       data: orders,
     });
   } catch (error) {
+    return res.status(500).send({
+      status: "INTERNAL SERVER ERROR",
+      message: error.message,
+    });
+  }
+};
+
+exports.UserProofPayment = async (req, res) => {
+  try {
+    const findOrder = await Orders.findOne({
+      where: {
+        id: req.body.orderId,
+        buyerId: req.userid,
+      },
+    });
+
+    const findStatus = await TransactionStatus.findOne({
+      where: {
+        name: "PAID",
+      },
+    });
+
+    findOrder.proofPayment =
+      "uploads/merchants/" + req.files.imagePayment[0].filename;
+    findOrder.transactionStatusId = findStatus.id;
+    findOrder.save();
+
+    const items = await OrderItems.findAll({
+      where: {
+        orderId: findOrder.id,
+      },
+    });
+
+    for (let i = 0; i < items.length; i++) {
+      const element = items[i];
+
+      const findProduct = await Products.findOne({
+        where: {
+          id: element.productId,
+        },
+      });
+
+      findProduct.qty = findProduct - element.qty;
+      findProduct.save();
+    }
+
+    return res.status(200).send({
+      status: "SUCCESS",
+      message: "Payment Success",
+      data: findOrder.id,
+    });
+  } catch (error) {
+    console.log(error);
     return res.status(500).send({
       status: "INTERNAL SERVER ERROR",
       message: error.message,
