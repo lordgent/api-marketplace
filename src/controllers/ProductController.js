@@ -250,6 +250,168 @@ exports.getAllProduct = async (req, res) => {
 };
 
 
+exports.getAllProductMerchant = async (req, res) => {
+  try {
+      const page = parseInt(req.query.offset) || 0;
+      const limit = parseInt(req.query.limit) || 10;
+      const type = parseInt(req.query.type);
+
+      let products;
+      let totalData;
+
+      const merchant = await Merchants.findOne({
+        where:{
+          userId: req.userid
+        }
+      })
+
+      if (type === 0) {
+          const findOrder = await OrderItems.findAll({
+              attributes: ['productId'],
+              raw: true,
+              group: ['productId']
+          });
+
+          const distinctProductIds = findOrder.map(order => order.productId);
+
+          products = await Products.findAll({
+              where: {
+                  merchantId: merchant.id,
+                  id: {
+                      [Op.in]: distinctProductIds
+                  },
+                  isDelete: 0,
+                  ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+                  ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
+              },
+              order: [["name", "ASC"]],
+              limit: limit,
+              offset: page * limit,
+              include: [
+                  {
+                      model: Categories,
+                      as: "category",
+                      attributes: ["name", "icon"],
+                  },
+                  {
+                      model: Merchants,
+                      as: "merchant",
+                      attributes: ["merchant_name", "id", "userId"],
+                  }
+              ],
+          });
+
+          totalData = products.length;
+      } else if(type === 1){
+        products = await Products.findAll({
+          where: {
+            merchantId: merchant.id,
+              isDelete: 0,
+              ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+              ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
+          },
+          order: [["name", "ASC"], ["createdAt", "DESC"]],
+          limit: limit,
+          offset: page * limit,
+          include: [
+              {
+                  model: Categories,
+                  as: "category",
+                  attributes: ["name", "icon"],
+              },
+              {
+                  model: Merchants,
+                  as: "merchant",
+                  attributes: ["merchant_name", "id", "userId"],
+              }
+          ],
+      });
+
+      totalData = await Products.count({
+          where: {
+              isDelete: 0,
+              ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+              ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
+          }
+      });
+      } 
+       else {
+          products = await Products.findAll({
+              where: {
+                merchantId: merchant.id,
+                  isDelete: 0,
+                  ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+                  ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
+              },
+              order: [["name", "ASC"]],
+              limit: limit,
+              offset: page * limit,
+              include: [
+                  {
+                      model: Categories,
+                      as: "category",
+                      attributes: ["name", "icon"],
+                  },
+                  {
+                      model: Merchants,
+                      as: "merchant",
+                      attributes: ["merchant_name", "id", "userId"],
+                  }
+              ],
+          });
+
+          totalData = await Products.count({
+              where: {
+                  isDelete: 0,
+                  ...(req.query.name ? { name: { [Op.like]: `%${req.query.name}%` } } : {}),
+                  ...(req.query.categoryId ? { categoryId: { [Op.like]: `%${req.query.categoryId}%` } } : {}),
+              }
+          });
+      }
+
+      const datas = await Promise.all(products.map(async (element) => {
+        const image = await ImageProducts.findOne({
+            where: {
+                productId: element.id,
+            },
+        });
+    
+        return {
+            id: element.id,
+            name: element.name,
+            price: element.price,
+            stock: element.stock,
+            photo: image ? image.image : "", 
+            description: element.description,
+            weight: element.weight,
+            isDelete: element.isDelete,
+            merchant: element.merchant,
+            category: element.category,
+            createdAt: element.createdAt,
+            updatedAt: element.updatedAt,
+        };
+    }));
+      return res.status(200).send({
+          status: "SUCCESS",
+          message: "List products",
+          data: {
+              products: datas,
+              page: {
+                  offset: page,
+                  limit: limit,
+                  totalData: totalData,
+              },
+          },
+      });
+  } catch (error) {
+      return res.status(500).send({
+          status: "INTERNAL SERVER ERROR",
+          message: error.message,
+      });
+  }
+};
+
+
 exports.getDetailProduct = async (req, res) => {
   try {
     const product = await Products.findOne({
