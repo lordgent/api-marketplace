@@ -1,5 +1,4 @@
 const express = require('express');
-const port = 8080;
 const app = express();
 const route = require('./routes/index')
 const cors = require('cors')
@@ -10,6 +9,7 @@ app.use(cors())
 app.use('/marketplace/api/v1/', route)
 app.use("/uploads", express.static("uploads"));
 
-app.listen(port,() => {
-    console.log(`server running on port ${port}`)
-});
+const server = app.listen(5000, () => {
+    const port = server.address().port;
+    console.log(`Express is working on port ${port}`);
+  });
