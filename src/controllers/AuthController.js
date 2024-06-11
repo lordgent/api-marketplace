@@ -4,6 +4,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const { v4: uuidv4 } = require("uuid");
 
+const SECRET_KEY = "akasdefiweof23ferwg4gwef23fwegfwgw34"
+
 exports.signIn = async (req, res) => {
   const schema = Joi.object({
     email: Joi.string().min(4).required(),
@@ -34,7 +36,7 @@ exports.signIn = async (req, res) => {
         message: "username/password incorrect",
       });
     }
-    const token = jwt.sign({ id: data.id }, process.env.SECRET_KEY);
+    const token = jwt.sign({ id: data.id }, SECRET_KEY);
     const access = await AccessRoles.findOne({
         where: {
           userId: data.id
