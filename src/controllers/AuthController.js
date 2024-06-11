@@ -27,7 +27,7 @@ exports.signIn = async (req, res) => {
     });
 
     const validd = await bcrypt.compare(password, data.password);
-    const SECRET_KEY = "akasdefiweof23ferwg4gwef23fwegfwgw34"
+    const secret = "akasdefiweof23ferwg4gwef23fwegfwgw34"
 
     if (!validd) {
       return res.status(400).send({
@@ -35,7 +35,7 @@ exports.signIn = async (req, res) => {
         message: "username/password incorrect",
       });
     }
-    const token = jwt.sign({ id: data.id }, SECRET_KEY);
+    const token = jwt.sign({ id: data.id }, secret);
     const access = await AccessRoles.findOne({
         where: {
           userId: data.id

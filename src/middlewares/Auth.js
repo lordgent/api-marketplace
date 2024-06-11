@@ -1,11 +1,9 @@
 const {Users,Roles,AccessRoles} = require('../../models');
 const jwt = require('jsonwebtoken')
-require('dotenv').config();
-
 
 exports.auth = async (req,res,next) => {
     try {
-        const SECRET_KEY = "akasdefiweof23ferwg4gwef23fwegfwgw34"
+        const secret = "akasdefiweof23ferwg4gwef23fwegfwgw34"
 
         const authHeader = req.header("Authorization");
         const token = authHeader && authHeader.split(" ")[1]; 
@@ -16,7 +14,7 @@ exports.auth = async (req,res,next) => {
             });
           }
           
-          const verified = jwt.verify(token, SECRET_KEY);
+          const verified = jwt.verify(token, secret);
          
           req.userid = verified.id;
           next();
