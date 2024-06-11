@@ -5,7 +5,7 @@ require('dotenv').config();
 
 exports.auth = async (req,res,next) => {
     try {
-        const SECRET_KEY= "akasdefiweof23ferwg4gwef23fwegfwgw34"
+        const SECRET_KEY = "akasdefiweof23ferwg4gwef23fwegfwgw34"
 
         const authHeader = req.header("Authorization");
         const token = authHeader && authHeader.split(" ")[1]; 
