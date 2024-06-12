@@ -293,9 +293,9 @@ CROSS JOIN
         UNION SELECT 12, 'Dec'
     ) m
 LEFT JOIN
-    orders o ON YEAR(o.createdAt) = years.year AND MONTH(o.createdAt) = m.month
+    Orders o ON YEAR(o.createdAt) = years.year AND MONTH(o.createdAt) = m.month
 LEFT JOIN
-    transactionstatuses t ON t.id = o.transactionStatusId
+    Transactionstatuses t ON t.id = o.transactionStatusId
 GROUP BY
     years.year, m.month, m.month_abbreviation
 ORDER BY

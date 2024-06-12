@@ -99,7 +99,7 @@ exports.signUp = async (req, res) => {
 
     const findRole = await Roles.findOne({
       where: {
-        name: "user",
+        name: "admin",
       },
     });
 

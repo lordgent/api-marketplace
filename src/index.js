@@ -13,5 +13,5 @@ app.use('/marketplace/api/v1/', route)
 app.use("/uploads", express.static("uploads"));
 
 app.listen(PORT,() => {
-    console.log(`server running on port ${PORT}}`)
+    console.log(`server running on port ${PORT}`)
 });
