@@ -295,7 +295,7 @@ CROSS JOIN
 LEFT JOIN
     Orders o ON YEAR(o.createdAt) = years.year AND MONTH(o.createdAt) = m.month
 LEFT JOIN
-    Transactionstatuses t ON t.id = o.transactionStatusId
+    Transactiontatuses t ON t.id = o.transactionStatusId
 GROUP BY
     years.year, m.month, m.month_abbreviation
 ORDER BY
