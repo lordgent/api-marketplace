@@ -322,7 +322,7 @@ exports.getAllProductMerchant = async (req, res) => {
               {
                   model: Merchants,
                   as: "merchant",
-                  attributes: ["merchant_name", "id", "userId"],
+                  attributes: ["merchant_name", "id", "userId","phone_number", "address"],
               }
           ],
       });
